@@ -19,34 +19,35 @@ const getSpeakerDuration = (seconds: number) => {
 };
 
 export function Rating({
-  sentimentAnalysis,
-  utterances,
-  speakerMeta,
-  highlights,
+  sentimentAnalysis = [],
+  utterances = [],
+  speakerMeta = {},
+  highlights = [],
 }: {
   sentimentAnalysis?: SentimentAnalysisResultsEntity[] | null;
   utterances?: UtterancesEntity[] | null;
   speakerMeta?: { [label: string]: string };
   highlights?: ResultsEntity[] | null;
 }) {
-  const sentimentObj = sentimentAnalysis?.reduce((acc, data) => {
-    acc[data.sentiment] = (acc[data.sentiment] || 0) + 1;
-    return acc;
-  }, {} as any);
-  const totalOccurances = Object.values(sentimentObj).reduce(
+  const sentimentObj =
+    sentimentAnalysis?.reduce((acc, data) => {
+      acc[data.sentiment] = (acc[data.sentiment] || 0) + 1;
+      return acc;
+    }, {} as any) || {};
+  const totalOccurances = Object.values(sentimentObj || {}).reduce(
     (acc: number, cur) => {
       acc = (acc as number) + (cur as number);
       return acc;
     },
     0
   );
-
-  const speakerDurationMap = utterances?.reduce((acc, cur) => {
-    const diff = cur.end - cur.start;
-    acc[cur.speaker] = (acc[cur.speaker] || 0) + diff / 1000;
-    return acc;
-  }, {} as any);
-  const totalSeconds = Object.values(speakerDurationMap).reduce(
+  const speakerDurationMap =
+    utterances?.reduce((acc, cur) => {
+      const diff = cur.end - cur.start;
+      acc[cur.speaker] = (acc[cur.speaker] || 0) + diff / 1000;
+      return acc;
+    }, {} as any) || {};
+  const totalSeconds = Object.values(speakerDurationMap || {}).reduce(
     (acc: number, cur) => {
       acc = (acc as number) + (cur as number);
       return acc;

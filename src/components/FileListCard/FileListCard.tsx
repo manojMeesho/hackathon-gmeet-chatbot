@@ -1,6 +1,8 @@
 import {
+  Box,
   Button,
   Checkbox,
+  CircularProgress,
   Link,
   Paper,
   Table,
@@ -13,6 +15,7 @@ import {
 import { ChangeEvent, useEffect, useState } from "react";
 import { getAllFiles } from "../../helpers/files";
 import { convertBytesToMb } from "../UploadFilesCard/UploadFileItem";
+import { errorToast } from "../../helpers/toast";
 
 export function FileListCard({
   ids,
@@ -21,6 +24,7 @@ export function FileListCard({
   ids: { id: string; text: string }[];
   onRun: (ids: { id: string; text: string }[]) => void;
 }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [fileList, setFileList] = useState<
     {
       id: string;
@@ -48,15 +52,37 @@ export function FileListCard({
     setSelectedIds((prevValue) => prevValue.filter((i) => i.id !== id));
   };
 
+  const triggerFetchList = () => {
+    setIsLoading(true);
+    getAllFiles(
+      (data: any) => {
+        setFileList(data);
+        setIsLoading(false);
+      },
+      () => {
+        setIsLoading(false);
+        errorToast("Failed to get files");
+      }
+    );
+  };
+
   useEffect(() => {
-    getAllFiles(setFileList, () => {});
+    triggerFetchList();
     const intervalRef = window.setInterval(() => {
-      getAllFiles(setFileList, () => {});
+      triggerFetchList();
     }, 10000);
     return () => {
       window.clearInterval(intervalRef);
     };
   }, []);
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <TableContainer component={Paper}>

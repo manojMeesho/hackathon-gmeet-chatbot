@@ -1,4 +1,10 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { grey } from "@mui/material/colors";
 import { sendSlackMessage } from "../../helpers/chat";
@@ -22,9 +28,13 @@ export function Summary({ summary }: { summary: string }) {
       </Stack>
       <Box my={2}>
         <Typography fontWeight={600}>AI SUMMARY</Typography>
-        {lines.map((l) => (
-          <Typography key={l}>{l}</Typography>
-        ))}
+        {!summary ? (
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          lines.map((l) => <Typography key={l}>{l}</Typography>)
+        )}
       </Box>
     </Box>
   );

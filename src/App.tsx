@@ -2,6 +2,7 @@ import { Container, Stack } from "@mui/material";
 import { UploadFilesCard } from "./components/UploadFilesCard/UploadFilesCard";
 import { FileListCard } from "./components/FileListCard/FileListCard";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { FileDetailsCard } from "./components/FileDetailsCard/FileDetailsCard";
 
 export function App() {
@@ -34,6 +35,22 @@ export function App() {
           />
         )}
       </Stack>
+      <Toaster
+        toastOptions={{
+          success: {
+            style: {
+              background: "green",
+              color: "white",
+            },
+          },
+          error: {
+            style: {
+              background: "red",
+              color: "white",
+            },
+          },
+        }}
+      />
     </Container>
   );
 }

@@ -62,29 +62,29 @@ export const changeSpeaker = (
     .catch(() => {});
 };
 
-export const getFileGptSummary = (jobId: string) => {
+export const getFileGptSummary = (jobId: string, onFailure?: () => void) => {
   axios
     .post(`${BASE_URL}/api/openai/custom`, {
       jobId,
       category: "gptSummary",
     })
-    .catch(() => {});
+    .catch(onFailure);
 };
 
-export const getFileQnA = (jobId: string) => {
+export const getFileQnA = (jobId: string, onFailure?: () => void) => {
   axios
     .post(`${BASE_URL}/api/openai/custom`, {
       jobId,
       category: "qna",
     })
-    .catch(() => {});
+    .catch(onFailure);
 };
 
-export const getFileActionItems = (jobId: string) => {
+export const getFileActionItems = (jobId: string, onFailure?: () => void) => {
   axios
     .post(`${BASE_URL}/api/openai/custom`, {
       jobId,
       category: "actionItem",
     })
-    .catch(() => {});
+    .catch(onFailure);
 };

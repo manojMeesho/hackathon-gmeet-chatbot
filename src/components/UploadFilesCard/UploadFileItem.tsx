@@ -13,6 +13,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
 import { useState } from "react";
 import { triggerGenerateTranscript } from "../../helpers/fileUpload";
+import { errorToast, successToast } from "../../helpers/toast";
 
 export const convertBytesToMb = (size: number) => {
   const sizeInMb = (size / 1000000).toFixed(1);
@@ -43,9 +44,18 @@ export function UploadFileItem({
   const [tag, setTag] = useState("");
 
   const handleDone = () => {
-    triggerGenerateTranscript(uploadedFileInfo?.assetId, tag, file.size, () => {
-      onClose?.();
-    });
+    triggerGenerateTranscript(
+      uploadedFileInfo?.assetId,
+      tag,
+      file.size,
+      () => {
+        onClose?.();
+        successToast("Triggered file for transcripts generation");
+      },
+      () => {
+        errorToast("Failed to trigger transcripts generation");
+      }
+    );
   };
 
   return (

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 export function Analysis({
@@ -15,22 +15,26 @@ export function Analysis({
       <Typography p={2} bgcolor={grey[300]} fontWeight={600}>
         ANALYSIS
       </Typography>
-      {!!qAndAs?.length && (
-        <Box my={2}>
-          <Typography fontWeight={600}>Q and A</Typography>
-          {qAndAs?.map((l) => (
-            <Typography key={l}>{l}</Typography>
-          ))}
-        </Box>
-      )}
-      {!!actionItems?.length && (
-        <Box my={2}>
-          <Typography fontWeight={600}>Action Items</Typography>
-          {actionItems?.map((l) => (
-            <Typography key={l}>{l}</Typography>
-          ))}
-        </Box>
-      )}
+      <Box my={2}>
+        <Typography fontWeight={600}>Q and A</Typography>
+        {!qAndAs?.length ? (
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          qAndAs?.map((l) => <Typography key={l}>{l}</Typography>)
+        )}
+      </Box>
+      <Box my={2}>
+        <Typography fontWeight={600}>Action Items</Typography>
+        {!actionItems?.length ? (
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          actionItems?.map((l) => <Typography key={l}>{l}</Typography>)
+        )}
+      </Box>
     </Box>
   );
 }
