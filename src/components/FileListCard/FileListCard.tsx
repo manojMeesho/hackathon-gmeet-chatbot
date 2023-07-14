@@ -51,8 +51,8 @@ export function FileListCard({
   useEffect(() => {
     getAllFiles(setFileList, () => {});
     const intervalRef = window.setInterval(() => {
-      // getAllFiles(setFileList, () => {});
-    }, 30000);
+      getAllFiles(setFileList, () => {});
+    }, 10000);
     return () => {
       window.clearInterval(intervalRef);
     };
