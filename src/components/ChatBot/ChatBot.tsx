@@ -73,17 +73,29 @@ const ChatBot = ({ selectedIds }: { selectedIds: string[] }) => {
   const [message, setMessage] = useState<string>("");
   const [chat, setChat] = useState<any[]>([]);
   const messagesEndRef = useRef<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (event: any) => {
     setMessage(event.target.value);
   };
 
   const handleSendMessage = () => {
+    setIsLoading(true);
     setChat((prevChat) => [...prevChat, { user: true, message: [message] }]);
-    getChatAnswer({ message, id: selectedIds }, ({ content }) => {
-      const botReply = content.split("\n");
-      setChat((prevChat) => [...prevChat, { user: false, message: botReply }]);
-    });
+    getChatAnswer(
+      { message, id: selectedIds },
+      ({ content }) => {
+        setIsLoading(false);
+        const botReply = content.split("\n");
+        setChat((prevChat) => [
+          ...prevChat,
+          { user: false, message: botReply },
+        ]);
+      },
+      () => {
+        setIsLoading(false);
+      }
+    );
     setMessage("");
   };
 
@@ -106,6 +118,7 @@ const ChatBot = ({ selectedIds }: { selectedIds: string[] }) => {
             <HTMLComponent message={chatItem.message} />
           </Typography>
         ))}
+        {isLoading && <i>Getting your answer...</i>}
         <div ref={messagesEndRef} />
       </div>
       <div style={classes.inputContainer}>
