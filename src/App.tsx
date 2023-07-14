@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Container, Stack } from "@mui/material";
+import { UploadFilesCard } from "./components/UploadFilesCard/UploadFilesCard";
+import { FileListCard } from "./components/FileListCard/FileListCard";
+import { useState } from "react";
+import { FileDetailsCard } from "./components/FileDetailsCard/FileDetailsCard";
 
-function App() {
+export function App() {
+  const [selectedIds, setSelectedIds] = useState<
+    { id: string; text: string }[]
+  >([]);
+  const [view, setView] = useState<"list" | "detail">("list");
+
+  const handleRun = (ids: { id: string; text: string }[]) => {
+    setSelectedIds(ids);
+    setView("detail");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container
+      sx={{ bgcolor: "ButtonHighlight", height: "100vh" }}
+      maxWidth="xl"
+    >
+      <Stack alignItems="center" sx={{ p: 2 }} gap={2}>
+        {view === "list" && (
+          <>
+            <UploadFilesCard />
+            <FileListCard onRun={handleRun} ids={selectedIds} />
+          </>
+        )}
+        {view === "detail" && (
+          <FileDetailsCard
+            selectedFiles={selectedIds}
+            onBack={() => setView("list")}
+          />
+        )}
+      </Stack>
+    </Container>
   );
 }
-
-export default App;
